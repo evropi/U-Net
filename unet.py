@@ -9,7 +9,7 @@ import logging
 import tensorflow as tf
 
 from tf_unet import util
-from tf_unet.layers import (weight_variable, weight_variable_devonc, bias_variable,
+from tf_unet.layers import (weight, weight_variable_devonc, bias_variable,
                             conv2d, deconv2d, max_pool, crop_and_concat, pixel_wise_softmax,
                             cross_entropy)
 
@@ -18,20 +18,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 
 def create_conv_net(x, rate, channels, n_class, layers=3, features_root=16, filter_size=3, pool_size=2,
                     summaries=True):
-    """
-    Creates a new convolutional unet for the given parametrization.
-
-    :param x: input tensor, shape [?,nx,ny,channels]
-    :param rate: dropout probability tensor
-    :param channels: number of channels in the input image
-    :param n_class: number of output labels
-    :param layers: number of layers in the net
-    :param features_root: number of features in the first layer
-    :param filter_size: size of the convolution filter
-    :param pool_size: size of the max pooling operation
-    :param summaries: Flag if summaries should be created
-    """
-
+   
     logging.info(
         "Layers {layers}, features {features}, filter size {filter_size}x{filter_size}, pool size: {pool_size}x{pool_size}".format(
             layers=layers,
@@ -157,14 +144,7 @@ def create_conv_net(x, rate, channels, n_class, layers=3, features_root=16, filt
 
 
 class Unet(object):
-    """
-    A unet implementation
-
-    :param channels: number of channels in the input image
-    :param n_class: number of output labels
-    :param cost: (optional) name of the cost function. Default is 'cross_entropy'
-    :param cost_kwargs: (optional) kwargs passed to the cost function. See Unet._get_cost for more options
-    """
+  
 
     def __init__(self, channels, n_class, cost="cross_entropy", cost_kwargs={}, **kwargs):
         tf.reset_default_graph()
@@ -192,12 +172,7 @@ class Unet(object):
             self.accuracy = tf.reduce_mean(tf.cast(self.correct_pred, tf.float32))
 
     def _get_cost(self, logits, cost_name, cost_kwargs):
-        """
-        Constructs the cost function, either cross_entropy, weighted cross_entropy or dice_coefficient.
-        Optional arguments are:
-        class_weights: weights for the different classes in case of multi-class imbalance
-        regularizer: power of the L2 regularizers added to the loss function
-        """
+     
 
         with tf.name_scope("cost"):
             flat_logits = tf.reshape(logits, [-1, self.n_class])
@@ -238,13 +213,7 @@ class Unet(object):
             return loss
 
     def predict(self, model_path, x_test):
-        """
-        Uses the model to create a prediction for the given data
-
-        :param model_path: path to the model checkpoint to restore
-        :param x_test: Data to predict on. Shape [n, nx, ny, channels]
-        :returns prediction: The unet prediction Shape [n, px, py, labels] (px=nx-self.offset/2)
-        """
+       
 
         init = tf.global_variables_initializer()
         with tf.Session() as sess:
@@ -272,12 +241,7 @@ class Unet(object):
         return save_path
 
     def restore(self, sess, model_path):
-        """
-        Restores a session from a checkpoint
-
-        :param sess: current session instance
-        :param model_path: path to file system checkpoint location
-        """
+       
 
         saver = tf.train.Saver()
         saver.restore(sess, model_path)
@@ -285,17 +249,7 @@ class Unet(object):
 
 
 class Trainer(object):
-    """
-    Trains a unet instance
-
-    :param net: the unet instance to train
-    :param batch_size: size of training batch
-    :param verification_batch_size: size of verification batch
-    :param norm_grads: (optional) true if normalized gradients should be added to the summaries
-    :param optimizer: (optional) name of the optimizer to use (momentum or adam)
-    :param opt_kwargs: (optional) kwargs passed to the learning rate (momentum opt) and to the optimizer
-
-    """
+    
 
     def __init__(self, net, batch_size=1, verification_batch_size = 4, norm_grads=False, optimizer="momentum", opt_kwargs={}):
         self.net = net
@@ -370,19 +324,7 @@ class Trainer(object):
 
     def train(self, data_provider, output_path, training_iters=10, epochs=100, dropout=0.75, display_step=1,
               restore=False, write_graph=False, prediction_path='prediction'):
-        """
-        Lauches the training process
-
-        :param data_provider: callable returning training and verification data
-        :param output_path: path where to store checkpoints
-        :param training_iters: number of training mini batch iteration
-        :param epochs: number of epochs
-        :param dropout: dropout probability
-        :param display_step: number of steps till outputting stats
-        :param restore: Flag if previous model should be restored
-        :param write_graph: Flag if the computation graph should be written as protobuf file to the output path
-        :param prediction_path: path where to save predictions on each epoch
-        """
+        
         save_path = os.path.join(output_path, "model.ckpt")
         if epochs == 0:
             return save_path
