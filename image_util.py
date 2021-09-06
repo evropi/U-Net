@@ -7,25 +7,7 @@ from PIL import Image
 
 
 class ImageDataProvider(BaseDataProvider):
-    """
-    Generic data provider for images, supports gray scale and colored images.
-    Assumes that the data images and label images are stored in the same folder
-    and that the labels have a different file suffix
-    e.g. 'train/fish_1.tif' and 'train/fish_1_mask.tif'
-    Number of pixels in x and y of the images and masks should be even.
-
-    Usage:
-    data_provider = ImageDataProvider("..fishes/train/*.tif")
-
-    :param search_path: a glob search pattern to find all data and label images
-    :param a_min: (optional) min value used for clipping
-    :param a_max: (optional) max value used for clipping
-    :param data_suffix: suffix pattern for the data images. Default '.tif'
-    :param mask_suffix: suffix pattern for the label images. Default '_mask.tif'
-    :param shuffle_data: if the order of the loaded file path should be randomized. Default 'True'
-
-    """
-
+ 
     def __init__(self, search_path, a_min=None, a_max=None, data_suffix=".tif", mask_suffix='_mask.tif', shuffle_data=True):
         super(ImageDataProvider, self).__init__(a_min, a_max)
         self.data_suffix = data_suffix
