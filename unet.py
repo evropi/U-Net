@@ -7,9 +7,12 @@ from collections import OrderedDict
 import logging
 
 import tensorflow as tf
+if int(tf.__version__[0]) > 1:
+    import tensorflow.compat.v1 as tf
+    tf.disable_v2_behavior()
 
-from tf_unet import util
-from tf_unet.layers import (weight, weight_variable_devonc, bias_variable,
+from unet import util
+from unet.layers import (weight, weight_variable_devonc, bias_variable,
                             conv2d, deconv2d, max_pool, crop_and_concat, pixel_wise_softmax,
                             cross_entropy)
 
