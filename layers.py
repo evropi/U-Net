@@ -7,14 +7,12 @@ from tensorflow.python.keras import backend as K
 
 
 def weight_variable(shape, stddev=0.1, name="weight"):
-    #initial = tf.truncated_normal(shape, stddev=stddev)
     return tf.Variable(tf.truncated_normal(shape, stddev=stddev), name=name)
 
 def weight_variable_devonc(shape, stddev=0.1, name="weight_devonc"):
     return tf.Variable(tf.truncated_normal(shape, stddev=stddev), name=name)
 
 def bias_variable(shape, name="bias"):
-    #initial = tf.constant(0.1, shape=shape)
     return tf.Variable( tf.constant(0.1, shape=shape), name=name)
 
 def conv2d(x, W, b, rate):
