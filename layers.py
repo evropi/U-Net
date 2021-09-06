@@ -1,6 +1,10 @@
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 import tensorflow as tf
+if int(tf.__version__[0]) > 1:
+    import tensorflow.compat.v1 as tf
+    tf.disable_v2_behavior()
+
 
 from tensorflow.python.keras.layers import BatchNormalization
 from tensorflow.python.keras import backend as K
