@@ -39,15 +39,7 @@ def plot_prediction(x_test, y_test, prediction, save=False):
         plt.show()
 
 def to_rgb(img):
-    """
-    Converts the given array into a RGB image. If the number of channels is not
-    3 the array is tiled such that it has 3 channels. Finally, the values are
-    rescaled to [0,255) 
-    
-    :param img: the array to convert [nx, ny, channels]
-    
-    :returns img: the rgb image [nx, ny, 3]
-    """
+   
     img = np.atleast_3d(img)
     channels = img.shape[2]
     if channels < 3:
@@ -62,12 +54,7 @@ def to_rgb(img):
     return img
 
 def crop_to_shape(data, shape):
-    """
-    Crops the array to the given image shape by removing the border (expects a tensor of shape [batches, nx, ny, channels].
     
-    :param data: the array to crop
-    :param shape: the target shape
-    """
     diff_nx = (data.shape[1] - shape[1])
     diff_ny = (data.shape[2] - shape[2])
 
@@ -83,15 +70,7 @@ def crop_to_shape(data, shape):
     return cropped
 
 def combine_img_prediction(data, gt, pred):
-    """
-    Combines the data, grouth thruth and the prediction into one rgb image
-    
-    :param data: the data tensor
-    :param gt: the ground thruth tensor
-    :param pred: the prediction tensor
-    
-    :returns img: the concatenated rgb image 
-    """
+   
     ny = pred.shape[2]
     ch = data.shape[3]
     img = np.concatenate((to_rgb(crop_to_shape(data, pred.shape).reshape(-1, ny, ch)), 
@@ -100,22 +79,12 @@ def combine_img_prediction(data, gt, pred):
     return img
 
 def save_image(img, path):
-    """
-    Writes the image to disk
-    
-    :param img: the rgb image to save
-    :param path: the target path
-    """
+   
     Image.fromarray(img.round().astype(np.uint8)).save(path, 'JPEG', dpi=[300,300], quality=90)
 
 
 def create_training_path(output_path, prefix="run_"):
-    """
-    Enumerates a new path using the prefix under the given output_path
-    :param output_path: the root path
-    :param prefix: (optional) defaults to `run_`
-    :return: the generated path as string in form `output_path`/`prefix_` + `<number>`
-    """
+   
     idx = 0
     path = os.path.join(output_path, "{:}{:03d}".format(prefix, idx))
     while os.path.exists(path):
