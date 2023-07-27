@@ -1,0 +1,7 @@
+/training/
+.idea
+*.jpg
+unet_trained/
+*.png
+
+
